@@ -18,6 +18,8 @@
     <h1>GitHub Pages Repositories for <a href="https://github.com/sorgm" target="_blank">sorgm</a></h1>
     <p>Fetching repository list...</p>
     <ul id="repo-list"></ul>
+    <h2>Web archives:</h2>
+    <ul id="archives-list"></ul>
 
     <script>
         async function loadRepos(owner = 'sorgm') {
@@ -29,6 +31,7 @@
                     .filter(r => r.has_pages && r.name!=`${owner}.github.io`)
                     .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
                 const list = document.getElementById('repo-list');
+                const archives = document.getElementById('archives-list');
                 if (pagesRepos.length === 0) {
                     list.innerHTML = '<li>No repositories with GitHub Pages found.</li>';
                 } else {
@@ -39,7 +42,12 @@
                         a.target = '_blank';
                         a.innerHTML = '<b>' + repo.name + '</b><br/>' + repo.description;
                         li.appendChild(a);
-                        list.appendChild(li);
+                        if (repo.name.endsWith("-archive")) {
+                            archives.appendChild(li);
+                        }
+                        else {
+                            list.appendChild(li);
+                        }
                     });
                 }
                 document.querySelector('p').remove();
